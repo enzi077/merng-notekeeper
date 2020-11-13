@@ -48,10 +48,12 @@ function App() {
     }
     
     const del=(id)=>{
-        deletePost({
-            variables: {id},
-            refetchQueries:['posts']
-        })
+        setTimeout(()=>{
+            deletePost({
+                variables: {id},
+                refetchQueries:['posts']
+            })
+        },2000)
     }
     
     if(error){
