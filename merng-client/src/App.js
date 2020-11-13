@@ -48,12 +48,10 @@ function App() {
     }
     
     const del=(id)=>{
-        setTimeout(()=>{
-            deletePost({
-                variables: {id},
-                refetchQueries:['posts']
-            })
-        },2000)
+        deletePost({
+            variables: {id},
+            refetchQueries:['posts']
+        })
     }
     
     if(error){
@@ -96,7 +94,7 @@ function App() {
                                 <p><strong>Description :</strong> {post.description}</p>
                             </div>
                             <div className={styles.app__buttons}>
-                                <Button color="red" onClick={()=>del(post.id)} className={styles.app__delete}>
+                                <Button color="red" onClick={del(post.id)} className={styles.app__delete}>
                                     Delete Post
                                 </Button>
                                 <Link to={`/update/${post.id}`}>
