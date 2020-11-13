@@ -14,7 +14,7 @@ function App() {
     
     useEffect(()=>{
         let mounted=true
-        if(dataPosts){
+        if(!loadingPosts && dataPosts){
             if(mounted){
                 setData(dataPosts)
             }
@@ -24,7 +24,7 @@ function App() {
             mounted=false
             setData()
         }
-    },[dataPosts])
+    },[loadingPosts,dataPosts])
     
     const [addPost,{error}]=useMutation(addMutation)
     
