@@ -62,6 +62,9 @@ function App() {
         console.log({message:mutationError})
         return <p>Not able to delete</p>
     }
+    if(mutationLoading){
+        return <Loader center content="loading" />
+    }
     if(loadingPosts) return <Loader center content="loading" />
     
   return (
