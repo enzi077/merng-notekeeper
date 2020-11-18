@@ -88,7 +88,6 @@ function App() {
             <div className={styles.app__row}>
             <Row>
             {
-                data &&
                 data.posts.map((post)=>(
                     <Col sm={12} md={6} lg={4} key={post.id}>
                         <Panel shaded bordered className={styles.app__card}>
