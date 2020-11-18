@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './styles/App.module.css'
 import {query,addMutation,delMutation} from './utils/apolloQueries'
 import {useMutation, useQuery} from '@apollo/react-hooks'
@@ -10,25 +10,10 @@ function App() {
     const [title,setTitle]=useState('')
     const [description,setDescription]=useState('')
     const {loading:loadingPosts,data:dataPosts}=useQuery(query)
-    const [data,setData]=useState()
     
-    useEffect(()=>{
-        let mounted=true
-        if(!loadingPosts && dataPosts){
-            if(mounted){
-                setData(dataPosts)
-            }
-        }
-        
-        return () => {
-            mounted=false
-            setData()
-        }
-    },[loadingPosts,dataPosts])
+    const [addPost,{loading:addLoading,error:addError}]=useMutation(addMutation)
     
-    const [addPost,{error}]=useMutation(addMutation)
-    
-    const [deletePost,{ loading: mutationLoading, error: mutationError }]=useMutation(delMutation)
+    const [deletePost,{ loading: deleteLoading, error: deleteError }]=useMutation(delMutation)
     
     const add=(e,title,description)=>{
         e.preventDefault()
@@ -54,15 +39,16 @@ function App() {
         })
     }
     
-    if(error){
-        console.log({message:error})
+    if(addError){
+        console.log({message:addError})
         return <p>Encountered a problem while adding new post</p>
     }
-    if(mutationError){
-        console.log({message:mutationError})
+    if(deleteError){
+        console.log({message:deleteError})
         return <p>Not able to delete</p>
     }
-    if(mutationLoading){
+    if (addLoading) return <Loader center content="loading" />
+    if(deleteLoading){
         return <Loader center content="loading" />
     }
     if(loadingPosts) return <Loader center content="loading" />
@@ -88,7 +74,7 @@ function App() {
             <div className={styles.app__row}>
             <Row>
             {
-                data.posts.map((post)=>(
+                dataPosts.posts.map((post)=>(
                     <Col sm={12} md={6} lg={4} key={post.id}>
                         <Panel shaded bordered className={styles.app__card}>
                             <div className={styles.app__text}>
@@ -96,7 +82,7 @@ function App() {
                                 <p><strong>Description :</strong> {post.description}</p>
                             </div>
                             <div className={styles.app__buttons}>
-                                <Button color="red" onClick={del(post.id)} className={styles.app__delete}>
+                                <Button color="red" onClick={()=>del(post.id)} className={styles.app__delete}>
                                     Delete Post
                                 </Button>
                                 <Link to={`/update/${post.id}`}>
